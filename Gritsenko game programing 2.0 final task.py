@@ -1,0 +1,97 @@
+class Motorcycle:
+    def __init__(self, start_behavior, ride_behavior, stop_behavior):
+        self.start_behavior = start_behavior
+        self.ride_behavior = ride_behavior
+        self.stop_behavior = stop_behavior
+        self.speed = 0
+        self.running = False
+
+    def start(self):
+        self.start_behavior()
+        self.running = True
+        self.speed = 0
+
+    def ride(self):
+        if self.running:
+            self.speed = random.randint(20, 120)
+            self.ride_behavior(self.speed)
+        else:
+            print("You need to start the motorcycle first!")
+
+    def stop(self):
+        if self.running:
+            self.stop_behavior()
+            self.running = False
+            self.speed = 0
+        else:
+            print("The motorcycle is already stopped.")
+
+    def measure_speed(self):
+        if self.running:
+            print(f"📏 Current speed: {self.speed} km/h")
+        else:
+            print("The motorcycle is off. Speed is 0 km/h.")
+
+    def set_start_behavior(self, behavior):
+        self.start_behavior = behavior
+
+    def set_ride_behavior(self, behavior):
+        self.ride_behavior = behavior
+
+    def set_stop_behavior(self, behavior):
+        self.stop_behavior = behavior
+
+
+# Lambda-based behaviors
+default_start = lambda: print("🔑 The motorcycle starts with a key.")
+silent_start = lambda: print("🔇 The motorcycle starts silently.")
+eco_ride = lambda speed: print(f"🛵 Riding economically at {speed} km/h.")
+aggressive_ride = lambda speed: print(f"🏍️ Zooming ahead at {speed} km/h!")
+normal_stop = lambda: print("🛑 The motorcycle comes to a smooth stop.")
+emergency_stop = lambda: print("⚠️ Emergency braking!")
+
+# Create the bike
+bike = Motorcycle(default_start, eco_ride, normal_stop)
+
+# Game loop
+def game_loop():
+    print("\n--- Welcome to: Motorbike Adventure ---")
+    print("Commands: start, ride, speed, stop, change, quit\n")
+
+    while True:
+        command = input("Enter a command: ").strip().lower()
+
+        if command == "start":
+            bike.start()
+
+        elif command == "ride":
+            bike.ride()
+
+        elif command == "speed":
+            bike.measure_speed()
+
+        elif command == "stop":
+            bike.stop()
+
+        elif command == "change":
+            print("\n-- Change riding style --")
+            choice = input("Choose style (eco / aggressive): ").strip().lower()
+            if choice == "eco":
+                bike.set_ride_behavior(eco_ride)
+                print("✅ Riding style set to: Eco.")
+            elif choice == "aggressive":
+                bike.set_ride_behavior(aggressive_ride)
+                print("✅ Riding style set to: Aggressive.")
+            else:
+                print("❌ Unknown style.")
+
+        elif command == "quit":
+            print("👋 Exiting the game. See you soon!")
+            break
+
+        else:
+            print("❓ Unknown command.")
+
+# Start the game
+if __name__ == "__main__":
+    game_loop()
